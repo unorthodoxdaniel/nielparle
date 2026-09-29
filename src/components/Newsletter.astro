@@ -15,7 +15,6 @@
       id="newsletter-form"
       action="https://app.kit.com/forms/9977355/subscriptions"
       method="post"
-      novalidate
     >
       <label class="sr-only" for="email">Adresse e-mail</label>
       <input
@@ -37,6 +36,9 @@
     const input = document.querySelector<HTMLInputElement>('#email');
     const button = form?.querySelector('button');
     const error = document.querySelector<HTMLElement>('#form-error');
+
+    // Native validation stays on when JavaScript is unavailable; the script shows its own messages instead.
+    if (form) form.noValidate = true;
 
     const messages = {
       invalid: 'Cette adresse ne semble pas valide. Vérifie-la et réessaie.',
@@ -150,14 +152,19 @@
 
   button:hover { color: var(--accent); }
 
-  input[aria-invalid='true'] { color: var(--accent); }
+  form:focus-within {
+    border-bottom-color: var(--accent);
+    box-shadow: 0 1px 0 var(--accent);
+  }
+
+  input[aria-invalid='true'] { color: var(--error); }
 
   button:disabled { cursor: default; color: var(--muted); }
 
   .form-error {
     min-height: 1.2em;
     margin: 10px 0 0;
-    color: var(--accent);
+    color: var(--error);
     font-size: .8rem;
   }
 
