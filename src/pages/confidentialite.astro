@@ -1,0 +1,98 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Confidentialité — Niel Parle"
+  description="Les données collectées lorsque tu consultes Niel Parle ou que tu t’inscris à la lettre."
+>
+  <Header />
+  <main class="privacy-shell">
+    <h1>Confidentialité</h1>
+
+    <p>
+      Niel Parle est un site personnel. Je limite autant que possible les données
+      collectées lorsque tu le consultes.
+    </p>
+
+    <h2>Mesure d’audience</h2>
+    <p>
+      J’utilise Umami pour comprendre de manière générale comment le site est utilisé :
+      pages consultées, sources de trafic, appareils et informations similaires.
+    </p>
+    <p>
+      Umami fonctionne sans cookies et n’est pas utilisé ici pour identifier
+      personnellement les visiteurs. Les données d’analyse sont hébergées dans la
+      région européenne d’Umami Cloud.
+    </p>
+
+    <h2>La lettre</h2>
+    <p>
+      Si tu t’inscris à la lettre, ton adresse email est transmise à Kit, le service
+      que j’utilise pour gérer les inscriptions et envoyer les emails. Elle est
+      utilisée uniquement dans le cadre de la lettre et des communications auxquelles
+      tu t’es inscrit(e).
+    </p>
+    <p>
+      L’inscription nécessite une confirmation par email. Tu peux te désinscrire à
+      tout moment grâce au lien présent dans les emails.
+    </p>
+
+    <h2>Services externes</h2>
+    <p>
+      Le site ne charge actuellement aucun contenu externe. Les vidéos renvoient
+      vers TikTok.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Pour toute question concernant tes données ou ce site, tu peux écrire à
+      <a href="mailto:bonjour@nielparle.com">bonjour@nielparle.com</a>.
+    </p>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .privacy-shell {
+    width: min(calc(100% - 48px), var(--reading-width));
+    margin: 0 auto;
+    padding: 82px 0 110px;
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    line-height: 1.72;
+  }
+
+  h1 {
+    margin: 0 0 48px;
+    font-size: clamp(3.4rem, 8vw, 6.8rem);
+    font-weight: 400;
+    line-height: .9;
+    letter-spacing: -.06em;
+  }
+
+  h2 {
+    margin: 2.1em 0 .7em;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -.025em;
+  }
+
+  p { margin: 0 0 1.45em; }
+
+  a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .15em;
+  }
+
+  @media (max-width: 760px) {
+    .privacy-shell {
+      width: min(calc(100% - 32px), var(--reading-width));
+      padding: 58px 0 80px;
+    }
+  }
+</style>

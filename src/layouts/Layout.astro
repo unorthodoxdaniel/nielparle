@@ -50,6 +50,13 @@ const socialImage = new URL(image, Astro.site ?? Astro.url);
     <meta name="twitter:image" content={socialImage} />
 
     <title>{title}</title>
+
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="883607e7-6c08-4ad4-977a-0af1b96f5d36"
+      data-domains="nielparle.com"
+    ></script>
   </head>
   <body>
     <slot />
