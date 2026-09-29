@@ -3,7 +3,7 @@ title: "Pourquoi j’écris cette lettre"
 description: "Une première note sur le fait d’apprendre le français en public, et d’essayer maintenant de l’écrire."
 date: 2026-09-29
 readTime: "3 min"
-draft: false
+draft: true
 ---
 
 Je ne sais pas encore exactement ce que cette lettre va devenir.

@@ -1,7 +1,13 @@
+---
+import { getCollection } from 'astro:content';
+
+const hasNotes = (await getCollection('articles', ({ data }) => !data.draft)).length > 0;
+---
+
 <header class="site-header site-shell">
   <a class="brand" href="/">Niel Parle</a>
   <nav aria-label="Navigation principale">
-    <a href="/#notes">Notes</a>
+    {hasNotes && <a href="/#notes">Notes</a>}
     <a href="/#video">En vidéo</a>
     <a href="/#lettre">La lettre</a>
   </nav>

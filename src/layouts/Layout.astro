@@ -5,12 +5,14 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  type?: 'website' | 'article';
 }
 
 const {
-  title = 'Niel Parle',
-  description = "J'apprends le français en public — à l'oral, à l'écrit, erreurs comprises.",
-  image = '/images/niel.jpg',
+  title = 'Niel Parle — J’apprends le français en public',
+  description = 'Je parle, j’écris, je fais des erreurs et je continue. Mon parcours pour parler français couramment.',
+  image = '/og-default.png',
+  type = 'website',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
@@ -25,12 +27,19 @@ const socialImage = new URL(image, Astro.site ?? Astro.url);
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Niel Parle" />
+    <meta property="og:locale" content="fr_FR" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
