@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Merci — Niel Parle" description="Ton inscription est presque terminée." noindex>
+  <Header />
+  <main class="confirmation site-shell">
+    <h1>Merci !</h1>
+    <p>Ton inscription est presque terminée. Vérifie ta boîte mail et clique sur le lien de confirmation.</p>
+    <p>Si tu ne vois rien après quelques minutes, pense à vérifier tes spams.</p>
+    <a class="back meta" href="/">← Retour à l’accueil</a>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .confirmation {
+    min-height: 70vh;
+    padding: 100px 0;
+  }
+
+  h1 {
+    margin: 0 0 40px;
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 400;
+    line-height: .9;
+    letter-spacing: -.06em;
+  }
+
+  p {
+    max-width: 560px;
+    margin: 0 0 1.2em;
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    line-height: 1.5;
+  }
+
+  .back {
+    display: inline-block;
+    margin-top: 32px;
+  }
+</style>

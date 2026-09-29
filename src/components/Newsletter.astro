@@ -11,24 +11,84 @@
       que tu veux voir où ça mène.
     </p>
 
-    <!-- V0.1 placeholder.
-         When Kit is configured, replace this form action/markup with the Kit form
-         while preserving the surrounding Niel Parle styling. -->
-    <form id="newsletter-form">
+    <form
+      id="newsletter-form"
+      action="https://app.kit.com/forms/9977355/subscriptions"
+      method="post"
+      novalidate
+    >
       <label class="sr-only" for="email">Adresse e-mail</label>
-      <input id="email" type="email" placeholder="vous@exemple.com" required />
+      <input
+        id="email"
+        name="email_address"
+        type="email"
+        placeholder="toi@exemple.com"
+        autocomplete="email"
+        aria-describedby="form-error"
+        required
+      />
       <button type="submit">S’inscrire →</button>
     </form>
-    <p class="form-note" id="form-note">Le formulaire sera relié à Kit avant le lancement.</p>
+    <p class="form-error" id="form-error" role="alert"></p>
   </div>
 
   <script>
-    const form = document.querySelector('#newsletter-form');
-    const note = document.querySelector('#form-note');
+    const form = document.querySelector<HTMLFormElement>('#newsletter-form');
+    const input = document.querySelector<HTMLInputElement>('#email');
+    const button = form?.querySelector('button');
+    const error = document.querySelector<HTMLElement>('#form-error');
 
-    form?.addEventListener('submit', (event) => {
+    const messages = {
+      invalid: 'Cette adresse ne semble pas valide. Vérifie-la et réessaie.',
+      generic: 'Un problème est survenu. Réessaie dans un instant.',
+    };
+
+    function showError(message: string) {
+      if (!form || !input || !button || !error) return;
+      error.textContent = message;
+      input.setAttribute('aria-invalid', 'true');
+      form.removeAttribute('aria-busy');
+      input.readOnly = false;
+      button.disabled = false;
+      button.textContent = 'S’inscrire →';
+      input.focus();
+    }
+
+    form?.addEventListener('submit', async (event) => {
+      if (!input || !button || !error) return;
       event.preventDefault();
-      if (note) note.textContent = 'Presque prêt — inscription Kit à connecter.';
+
+      error.textContent = '';
+      input.removeAttribute('aria-invalid');
+
+      if (!input.value.trim() || !input.checkValidity()) {
+        showError(messages.invalid);
+        return;
+      }
+
+      form.setAttribute('aria-busy', 'true');
+      input.readOnly = true;
+      button.disabled = true;
+      button.textContent = 'Envoi…';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          window.location.assign('/merci/');
+          return;
+        }
+
+        const fields: unknown = result?.errors?.fields;
+        showError(Array.isArray(fields) && fields.includes('email_address') ? messages.invalid : messages.generic);
+      } catch {
+        showError(messages.generic);
+      }
     });
   </script>
 </section>
@@ -90,10 +150,15 @@
 
   button:hover { color: var(--accent); }
 
-  .form-note {
+  input[aria-invalid='true'] { color: var(--accent); }
+
+  button:disabled { cursor: default; color: var(--muted); }
+
+  .form-error {
+    min-height: 1.2em;
     margin: 10px 0 0;
-    color: var(--muted);
-    font-size: .72rem;
+    color: var(--accent);
+    font-size: .8rem;
   }
 
   .sr-only {
