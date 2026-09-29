@@ -1,0 +1,73 @@
+<section id="video" class="video-section site-shell">
+  <div class="rule-heading">
+    <h2>En vidéo</h2>
+    <a class="meta" href="https://www.tiktok.com/@nielparle" target="_blank" rel="noreferrer">@nielparle</a>
+  </div>
+
+  <div class="video-intro">
+    <h2>J’essaie aussi de le dire à voix haute.</h2>
+    <p>
+      Une trace plus spontanée du parcours : parler, hésiter, recommencer,
+      et laisser les progrès s’accumuler.
+    </p>
+  </div>
+
+  <div class="creator-wrap">
+    <blockquote
+      class="tiktok-embed"
+      cite="https://www.tiktok.com/@nielparle"
+      data-unique-id="nielparle"
+      data-embed-type="creator"
+      style="max-width:780px;min-width:288px;"
+    >
+      <section>
+        <a target="_blank" rel="noreferrer" href="https://www.tiktok.com/@nielparle?refer=creator_embed">
+          @nielparle sur TikTok
+        </a>
+      </section>
+    </blockquote>
+  </div>
+
+  <script is:inline async src="https://www.tiktok.com/embed.js"></script>
+</section>
+
+<style>
+  .video-section { padding-bottom: 80px; }
+
+  .video-intro {
+    display: grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap: 72px;
+    padding: 48px 0 34px;
+  }
+
+  .video-intro h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 6vw, 5.7rem);
+    font-weight: 400;
+    line-height: .9;
+    letter-spacing: -.055em;
+  }
+
+  .video-intro p {
+    max-width: 460px;
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: 1.12rem;
+    line-height: 1.5;
+  }
+
+  .creator-wrap {
+    border-top: 1px solid var(--rule);
+    padding-top: 28px;
+  }
+
+  :global(.tiktok-embed) { margin-left: auto !important; }
+
+  @media (max-width: 760px) {
+    .video-intro { grid-template-columns: 1fr; gap: 20px; }
+    :global(.tiktok-embed) { margin-left: 0 !important; }
+  }
+</style>

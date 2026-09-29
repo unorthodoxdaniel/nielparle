@@ -1,0 +1,86 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  articles: CollectionEntry<'articles'>[];
+}
+
+const { articles } = Astro.props;
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+  }).format(date);
+---
+
+<section id="notes" class="notes site-shell">
+  <div class="rule-heading">
+    <h2>Dernières notes</h2>
+    <span class="meta">En français, erreurs comprises</span>
+  </div>
+
+  {articles.length ? articles.map((article, index) => (
+    <article class="note-row">
+      <div class="meta note-meta">
+        <time datetime={article.data.date.toISOString()}>{formatDate(article.data.date)}</time>
+        {article.data.readTime && <><br />{article.data.readTime}</>}
+      </div>
+
+      <div>
+        <h3><a href={`/articles/${article.id}/`}>{article.data.title}</a></h3>
+        <p>{article.data.description}</p>
+      </div>
+
+      <div class="note-number">{String(index + 1).padStart(2, '0')}</div>
+    </article>
+  )) : (
+    <p class="empty">La première note arrive bientôt.</p>
+  )}
+</section>
+
+<style>
+  .note-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) 60px;
+    gap: 28px;
+    padding: 32px 0 36px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  h3 {
+    max-width: 760px;
+    margin: 0 0 10px;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-weight: 400;
+    line-height: .98;
+    letter-spacing: -.045em;
+  }
+
+  p {
+    max-width: 610px;
+    margin: 0;
+    color: var(--muted);
+    font-size: .98rem;
+    line-height: 1.6;
+  }
+
+  .note-number {
+    text-align: right;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-style: italic;
+  }
+
+  .empty {
+    padding: 42px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (max-width: 700px) {
+    .note-row { grid-template-columns: 1fr; gap: 10px; }
+    .note-number { display: none; }
+  }
+</style>

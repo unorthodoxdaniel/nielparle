@@ -1,0 +1,116 @@
+---
+import Layout from './Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  readTime?: string;
+}
+
+const { title, description, date, readTime } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(date);
+---
+
+<Layout title={`${title} — Niel Parle`} description={description}>
+  <Header />
+
+  <main class="article-shell">
+    <header class="article-header">
+      <a class="back meta" href="/">← Niel Parle</a>
+      <p class="meta">
+        <time datetime={date.toISOString()}>{formattedDate}</time>
+        {readTime && <> · {readTime}</>}
+      </p>
+      <h1>{title}</h1>
+      <p class="description">{description}</p>
+    </header>
+
+    <article class="article-content">
+      <slot />
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .article-shell {
+    width: min(calc(100% - 48px), var(--reading-width));
+    margin: 0 auto;
+    padding: 82px 0 110px;
+  }
+
+  .article-header {
+    padding-bottom: 48px;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 58px;
+  }
+
+  .article-header > .meta { margin: 0 0 18px; }
+
+  h1 {
+    margin: 0 0 24px;
+    font-family: var(--serif);
+    font-size: clamp(3.4rem, 8vw, 6.8rem);
+    font-weight: 400;
+    line-height: .9;
+    letter-spacing: -.06em;
+  }
+
+  .description {
+    max-width: 620px;
+    margin: 0;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    line-height: 1.45;
+  }
+
+  .article-content {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    line-height: 1.72;
+  }
+
+  .article-content :global(p) { margin: 0 0 1.45em; }
+
+  .article-content :global(h2) {
+    margin: 2.1em 0 .7em;
+    font-size: 2rem;
+    line-height: 1.1;
+    letter-spacing: -.025em;
+  }
+
+  .article-content :global(a) {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .15em;
+  }
+
+  .article-content :global(blockquote) {
+    margin: 2em 0;
+    padding-left: 1.2em;
+    border-left: 1px solid var(--ink);
+    font-style: italic;
+  }
+
+  @media (max-width: 760px) {
+    .article-shell {
+      width: min(calc(100% - 32px), var(--reading-width));
+      padding: 58px 0 80px;
+    }
+  }
+</style>

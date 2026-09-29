@@ -1,0 +1,118 @@
+<section id="lettre" class="newsletter site-shell">
+  <div>
+    <p class="eyebrow">La lettre</p>
+    <h2>J’apprends à parler français. Maintenant, j’essaie aussi de l’écrire.</h2>
+  </div>
+
+  <div class="signup">
+    <p>
+      Une fois par semaine, j’écris en français sur ce qui me passe par la tête,
+      avec mes erreurs et tout le reste. Si tu es arrivé jusqu’ici, peut-être
+      que tu veux voir où ça mène.
+    </p>
+
+    <!-- V0.1 placeholder.
+         When Kit is configured, replace this form action/markup with the Kit form
+         while preserving the surrounding Niel Parle styling. -->
+    <form id="newsletter-form">
+      <label class="sr-only" for="email">Adresse e-mail</label>
+      <input id="email" type="email" placeholder="vous@exemple.com" required />
+      <button type="submit">S’inscrire →</button>
+    </form>
+    <p class="form-note" id="form-note">Le formulaire sera relié à Kit avant le lancement.</p>
+  </div>
+
+  <script>
+    const form = document.querySelector('#newsletter-form');
+    const note = document.querySelector('#form-note');
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (note) note.textContent = 'Presque prêt — inscription Kit à connecter.';
+    });
+  </script>
+</section>
+
+<style>
+  .newsletter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding: 80px 0 90px;
+    border-top: 1px solid var(--ink);
+  }
+
+  .eyebrow { margin: 0 0 18px; }
+
+  h2 {
+    max-width: 620px;
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 5.5vw, 5.5rem);
+    font-weight: 400;
+    line-height: .92;
+    letter-spacing: -.055em;
+  }
+
+  .signup {
+    align-self: end;
+    max-width: 490px;
+  }
+
+  .signup > p:first-child {
+    margin: 0 0 30px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  form {
+    display: flex;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    padding: 14px 0;
+    outline: 0;
+    background: transparent;
+    color: var(--ink);
+  }
+
+  button {
+    border: 0;
+    padding: 14px 0 14px 24px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  button:hover { color: var(--accent); }
+
+  .form-note {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: .72rem;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 760px) {
+    .newsletter {
+      grid-template-columns: 1fr;
+      gap: 44px;
+      padding: 64px 0;
+    }
+  }
+</style>

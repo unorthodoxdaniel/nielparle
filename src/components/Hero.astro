@@ -1,0 +1,108 @@
+<section class="hero site-shell">
+  <div class="hero-title">
+    <p class="eyebrow">Une expérience personnelle en français</p>
+    <h1 aria-label="J'apprends le français en public.">
+      <span class="hero-line">
+        J’apprends le
+        <span class="hero-photo" aria-hidden="true">
+          <img src="/images/niel.jpg" alt="" />
+        </span>
+      </span>
+      <span class="hero-line">français en public.</span>
+    </h1>
+  </div>
+
+  <div class="hero-copy">
+    <p>
+      Je parle, j’écris, je fais des erreurs et je continue.
+      <em>Pas une méthode. Juste le parcours.</em>
+    </p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 470px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(230px, .7fr);
+    gap: 72px;
+    align-items: end;
+    padding: 80px 0 58px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .eyebrow { margin: 0 0 16px; }
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(3.7rem, 7.4vw, 7rem);
+    font-weight: 400;
+    line-height: .88;
+    letter-spacing: -.065em;
+  }
+
+  .hero-line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .hero-photo {
+    display: inline-block;
+    position: relative;
+    width: 1.08em;
+    height: .72em;
+    margin-left: .08em;
+    vertical-align: baseline;
+    overflow: hidden;
+    border-radius: .22em .035em .22em .035em;
+    background: #d8d4cb;
+  }
+
+  .hero-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 48%;
+    transform: scale(1.12);
+  }
+
+  .hero-copy {
+    max-width: 320px;
+    padding-bottom: 8px;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: 1.18rem;
+    line-height: 1.48;
+  }
+
+  .hero-copy p { margin: 0; }
+  .hero-copy em { color: var(--ink); }
+
+  @media (max-width: 900px) {
+    .hero { gap: 38px; }
+    h1 { font-size: clamp(3.2rem, 8vw, 5.5rem); }
+  }
+
+  @media (max-width: 760px) {
+    .hero {
+      min-height: auto;
+      grid-template-columns: 1fr;
+      gap: 42px;
+      padding: 62px 0 42px;
+    }
+
+    h1 {
+      font-size: clamp(2.85rem, 12.2vw, 5.2rem);
+      letter-spacing: -.06em;
+    }
+
+    .hero-copy { max-width: 430px; }
+  }
+
+  @media (max-width: 390px) {
+    h1 { font-size: 11.4vw; }
+  }
+</style>

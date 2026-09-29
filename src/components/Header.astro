@@ -1,0 +1,37 @@
+<header class="site-header site-shell">
+  <a class="brand" href="/">Niel Parle</a>
+  <nav aria-label="Navigation principale">
+    <a href="/#notes">Notes</a>
+    <a href="/#video">En vidéo</a>
+    <a href="/#lettre">La lettre</a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .brand {
+    font-family: var(--serif);
+    font-size: 1.45rem;
+    font-style: italic;
+    letter-spacing: -.03em;
+  }
+
+  nav {
+    display: flex;
+    gap: 28px;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 520px) {
+    nav { gap: 14px; font-size: .65rem; }
+  }
+</style>
