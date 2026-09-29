@@ -1,3 +1,8 @@
+---
+import { Image } from 'astro:assets';
+import niel from '../assets/niel.jpg';
+---
+
 <section class="hero site-shell">
   <div class="hero-title">
     <p class="eyebrow">Une expérience personnelle en français</p>
@@ -5,7 +10,7 @@
       <span class="hero-line">
         J’apprends le
         <span class="hero-photo" aria-hidden="true">
-          <img src="/images/niel.jpg" alt="" />
+          <Image src={niel} alt="" width={300} widths={[200, 300]} sizes="120px" loading="eager" />
         </span>
       </span>
       <span class="hero-line">français en public.</span>
@@ -14,7 +19,7 @@
 
   <div class="hero-copy">
     <p>
-      Je parle, j’écris, je fais des erreurs et je continue.
+      Je parle, j’écris, je fais des erreurs et je continue.{' '}
       <em>Pas une méthode. Juste le parcours.</em>
     </p>
   </div>
@@ -50,7 +55,7 @@
   .hero-photo {
     display: inline-block;
     position: relative;
-    width: 1.08em;
+    width: .9em;
     height: .72em;
     margin-left: .08em;
     vertical-align: baseline;
@@ -65,8 +70,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 50% 48%;
-    transform: scale(1.12);
+    object-position: 40% 68%;
   }
 
   .hero-copy {
