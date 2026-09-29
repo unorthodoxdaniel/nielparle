@@ -1,3 +1,13 @@
+---
+import { Image } from 'astro:assets';
+import videos from '../data/videos.json';
+
+const covers = import.meta.glob<{ default: ImageMetadata }>('../assets/videos/*.jpg', { eager: true });
+
+const caption = (title: string) =>
+  title.replace(/#\S+/g, '').replace(/[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}]/gu, '').trim();
+---
+
 <section id="video" class="video-section site-shell">
   <div class="rule-heading">
     <h2>En vidéo</h2>
@@ -12,23 +22,25 @@
     </p>
   </div>
 
-  <div class="creator-wrap">
-    <blockquote
-      class="tiktok-embed"
-      cite="https://www.tiktok.com/@nielparle"
-      data-unique-id="nielparle"
-      data-embed-type="creator"
-      style="max-width:780px;min-width:288px;"
-    >
-      <section>
-        <a target="_blank" rel="noreferrer" href="https://www.tiktok.com/@nielparle?refer=creator_embed">
-          @nielparle sur TikTok
+  <ul class="video-grid">
+    {videos.map((video) => (
+      <li>
+        <a href={video.url} target="_blank" rel="noreferrer">
+          <Image
+            src={covers[`../assets/videos/${video.image}`].default}
+            alt=""
+            width={360}
+            widths={[240, 360]}
+            sizes="(max-width: 760px) 45vw, 180px"
+            loading="lazy"
+          />
+          <span class="caption">{caption(video.title)}</span>
         </a>
-      </section>
-    </blockquote>
-  </div>
+      </li>
+    ))}
+  </ul>
 
-  <script is:inline async src="https://www.tiktok.com/embed.js"></script>
+  <p class="more"><a class="meta" href="https://www.tiktok.com/@nielparle" target="_blank" rel="noreferrer">Voir tout sur TikTok →</a></p>
 </section>
 
 <style>
@@ -59,15 +71,50 @@
     line-height: 1.5;
   }
 
-  .creator-wrap {
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 20px;
+    margin: 0;
+    padding: 28px 0 0;
     border-top: 1px solid var(--rule);
-    padding-top: 28px;
+    list-style: none;
   }
 
-  :global(.tiktok-embed) { margin-left: auto !important; }
+  .video-grid a { display: block; }
+
+  .video-grid img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    background: #d8d4cb;
+    border-radius: .35rem .05rem .35rem .05rem;
+  }
+
+  .caption {
+    display: block;
+    margin-top: 10px;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: .92rem;
+    line-height: 1.35;
+  }
+
+  .video-grid a:hover .caption { color: var(--accent); }
+
+  .more { margin: 28px 0 0; }
+
+  @media (max-width: 900px) {
+    .video-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
 
   @media (max-width: 760px) {
     .video-intro { grid-template-columns: 1fr; gap: 20px; }
-    :global(.tiktok-embed) { margin-left: 0 !important; }
+  }
+
+  @media (max-width: 520px) {
+    .video-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
   }
 </style>
