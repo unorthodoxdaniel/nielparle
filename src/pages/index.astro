@@ -18,8 +18,8 @@ const articles = (await getCollection('articles'))
   <Header />
   <main>
     <Hero />
-    {articles.length > 0 && <NotesList articles={articles} />}
     <VideoSection />
+    {articles.length > 0 && <NotesList articles={articles} />}
     <Newsletter />
   </main>
   <Footer />
