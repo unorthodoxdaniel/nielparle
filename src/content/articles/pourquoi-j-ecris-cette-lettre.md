@@ -1,29 +1,23 @@
 ---
-title: "Pourquoi j’écris cette lettre"
-description: "Une première note sur le fait d’apprendre le français en public, et d’essayer maintenant de l’écrire."
-date: 2026-09-29
-readTime: "3 min"
-draft: true
+title: "Pourquoi j’ai décidé de t’écris chaque semaine"
+description: "Bienvenue chez moi!"
+date: 2026-09-30
+readTime: "2 min"
+draft: false
 ---
 
-Je ne sais pas encore exactement ce que cette lettre va devenir.
+J’espère que tout va bien. Merci d’avoir pris du temps pour suivre mon parcours. Depuis Février, j’apprends français officiellement. L’apprentissage a été amusant et fascinant mais aussi stressant. Certes, ce n’était pas facile, mais je pense que c’est important d’essayer de faire des choses difficiles et c’est l’une de raisons pourquoi j’ai decidé d’apprendre français. Après quelques mois, j’ai obtenu un niveau qui a besoin de utiliser le vrai monde au lieu des cours traditionnels. il s’agit de pratiquer tous les temps. Cependant, comme un adulte, c’est difficile de le faire avec des responsabilités, sauf si on a une raison.
 
-Et c’est probablement une bonne raison de commencer maintenant.
+Du coup, ma raison est devenu mon parcours en public. Je me suis rendu compte que si je trouve des personnes qui sont intéressés de m'écouter, je pourrais trouver la motivation plus facilement et tester mes compétences avec des natifs. C’est difficile d’apprendre tout seul, alors, j’ai décidé d’ouvrir mon apprentissage. J’ai créé un compte et publier des videos chaque jour. Ça a été intéressant et beaucoup utile.
 
-J’apprends le français depuis un moment. Jusqu’ici, une grande partie du travail a consisté à écouter, lire, parler, hésiter, faire des erreurs, puis recommencer. Maintenant, j’ai envie d’ajouter quelque chose d’autre : **écrire régulièrement en français**.
+Alors, je me suis dit, je pourrais utiliser cette méthode pour écrire. Chaque semaine, je voudrais essayer d'écrire une lettre sur ce qui m'intéresse et cela permettrait d'améliorer mon expression écrite.
 
-Pas parce que je pense avoir quelque chose à enseigner. Au contraire. Je suis encore en train d’apprendre.
+Je ne sais pas quels règles sont importantes, soit je ne utilise pas « Google Translate» ou ne corrige pas mes erreurs orthographes avec « Spell checkers » mais je sais que le regle le plus important, c’est de ne pas utiliser IA. J'écrirai ce que je peux et espérant, chaque semaine, mes erreurs diminueront. C’est important de trouver un équilibre entre mon vrai niveau et utilisant chaque lettre pour apprenant. Mais, je ne veux pas trop réfléchir ou je ne vais rien faire.
 
-## Pourquoi l’écrire en public ?
+Alors, ceci, c’est moi, faisant quelque chose.
 
-Il y a quelque chose d’utile dans le fait de rendre le progrès visible.
+Merci, encore une fois!
 
-Quand j’essaie de parler français, je ne peux pas attendre que chaque phrase soit parfaite. Je dois utiliser ce que j’ai, remarquer ce qui manque et continuer. J’aimerais traiter l’écriture de la même manière.
+À la prochaine,
 
-Alors cette lettre sera un endroit où je peux parler de ce qui m’intéresse, de ce que je remarque et parfois du français lui-même — **avec mes erreurs et tout le reste**.
-
-Je ne promets pas une méthode.
-
-Je promets simplement de continuer.
-
-À la semaine prochaine.
+*Niel.*
