@@ -26,6 +26,18 @@ Things we've decided to do later, with enough context that someone (or a fresh C
 
 **Optional follow-up: scheduled refresh.** A GitHub Action (or a Netlify build hook on a timer) that runs the script and commits any change would make the strip update with no action from you. It adds infrastructure and a bot that commits to `main`, so only do it if the manual command becomes a chore.
 
+### Explore: sync newsletters and site posts through the Kit API
+
+**Goal:** Say "new newsletter sent, create a corresponding post" and have a script turn the latest Kit broadcast into a file in `src/content/articles/`. Also the reverse: write a post on the site and create a **draft** broadcast in Kit (never send automatically).
+
+**Open questions**
+- **Is API access on Kit's free plan?** Sources disagree. A pricing tracker says it moved to the free plan on January 1, 2025, and one page says it's still paid. Check Settings → Developer in the Kit account; if an API key can be created, it's available.
+- **Draft quality.** Broadcasts created through the API are plainer than ones built in Kit's editor, so the first one needs a visual check. Images need absolute URLs.
+
+**Constraints**
+- The key lives in a gitignored `.env` (`KIT_API_KEY`), never in chat or the repo. The site stays fully static; this would be a local script, not a backend.
+- Kit v4 endpoints (`/v4/broadcasts`) to be confirmed against Kit's developer docs before building.
+
 ## Nice to have
 
 Small items from the pre-launch QA audit. None blocks anything.
