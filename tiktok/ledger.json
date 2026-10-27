@@ -1,0 +1,35 @@
+{
+  "covered": [
+    {
+      "prompt": "Préféreriez-vous un trajet lent et agréable ou arriver plus tôt pour explorer davantage ?",
+      "source": "reference/44dc09c25f304d3aa2c4ef72599d7eea.MOV",
+      "posted": null
+    },
+    {
+      "prompt": "Comment choisiriez-vous entre voyager seul et voyager en groupe ?",
+      "source": "reference/60E07911-DEE7-4913-99FB-CADB4C915752.MP4",
+      "posted": null
+    },
+    {
+      "prompt": "Prendriez-vous un train de nuit plutôt qu'un vol court s'il coûtait deux fois plus cher ?",
+      "source": "reference/64d9ee3981814ea0932b5e0f0bb97f43.MOV",
+      "posted": null
+    },
+    {
+      "prompt": "Que souhaiteriez-vous comprendre avant de passer un mois dans un lieu inconnu ?",
+      "source": "reference/B795431B-06FA-42D2-9530-FA4110A423E7.MP4",
+      "posted": null
+    },
+    {
+      "prompt": "Confieriez-vous l'organisation de vacances surprises à une IA sans pouvoir changer le programme ?",
+      "source": "reference/E4834408-A159-409E-BC33-F46BC293495A.MP4",
+      "posted": null
+    },
+    {
+      "prompt": "Vous arrivez à une gare avec deux heures avant votre correspondance. Comment décideriez-vous de sortir explorer ou de rester à proximité ?",
+      "source": "reference/ce68088cae1c4a6da8c3bac206229c64.MOV",
+      "posted": null
+    }
+  ],
+  "skipped": []
+}

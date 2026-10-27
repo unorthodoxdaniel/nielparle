@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# TikTok workflow: footage, local Python, tool caches
+video-content/
+.venv/
+__pycache__/
+tiktok/.work/
