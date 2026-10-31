@@ -1,6 +1,7 @@
 ---
 import Layout from './Layout.astro';
 import Header from '../components/Header.astro';
+import Newsletter from '../components/Newsletter.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props {
@@ -38,6 +39,7 @@ const formattedDate = new Intl.DateTimeFormat('fr-FR', {
     </article>
   </main>
 
+  <Newsletter />
   <Footer />
 </Layout>
 
