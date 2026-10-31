@@ -8,10 +8,10 @@ import VideoSection from '../components/VideoSection.astro';
 import Newsletter from '../components/Newsletter.astro';
 import Footer from '../components/Footer.astro';
 
-const articles = (await getCollection('articles'))
+const allArticles = (await getCollection('articles'))
   .filter((article) => !article.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const articles = allArticles.slice(0, 3);
 ---
 
 <Layout>
@@ -19,7 +19,7 @@ const articles = (await getCollection('articles'))
   <main>
     <Hero />
     <VideoSection />
-    {articles.length > 0 && <NotesList articles={articles} />}
+    {articles.length > 0 && <NotesList articles={articles} moreLink={allArticles.length > articles.length} />}
     <Newsletter />
   </main>
   <Footer />

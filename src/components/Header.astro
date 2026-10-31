@@ -7,7 +7,7 @@ const hasNotes = (await getCollection('articles', ({ data }) => !data.draft)).le
 <header class="site-header site-shell">
   <a class="brand" href="/">Niel Parle</a>
   <nav aria-label="Navigation principale">
-    {hasNotes && <a href="/#notes">Notes</a>}
+    {hasNotes && <a href="/articles/">Notes</a>}
     <a href="/#video">En vidéo</a>
     <a href="/#lettre">La lettre</a>
   </nav>

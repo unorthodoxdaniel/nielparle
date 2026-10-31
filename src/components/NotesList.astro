@@ -3,9 +3,11 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   articles: CollectionEntry<'articles'>[];
+  heading?: string;
+  moreLink?: boolean;
 }
 
-const { articles } = Astro.props;
+const { articles, heading = 'Dernières notes', moreLink = false } = Astro.props;
 
 const formatDate = (date: Date) =>
   new Intl.DateTimeFormat('fr-FR', {
@@ -17,7 +19,7 @@ const formatDate = (date: Date) =>
 
 <section id="notes" class="notes site-shell">
   <div class="rule-heading">
-    <h2>Dernières notes</h2>
+    <h2>{heading}</h2>
     <span class="meta">En français, erreurs comprises</span>
   </div>
 
@@ -37,6 +39,10 @@ const formatDate = (date: Date) =>
     </article>
   )) : (
     <p class="empty">La première note arrive bientôt.</p>
+  )}
+
+  {moreLink && (
+    <p class="more"><a href="/articles/">Toutes les notes →</a></p>
   )}
 </section>
 
@@ -73,6 +79,16 @@ const formatDate = (date: Date) =>
     font-family: var(--serif);
     font-style: italic;
   }
+
+  .more {
+    padding: 28px 0 0;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .more a { color: var(--ink); }
+  .more a:hover { text-decoration: underline; }
 
   .empty {
     padding: 42px 0;
