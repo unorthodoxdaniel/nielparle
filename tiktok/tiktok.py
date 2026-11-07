@@ -8,6 +8,9 @@
     npm run tiktok -- render <folder>      burn titles, captions and CTAs into video.mp4
     npm run tiktok -- posted <folder>      log the prompt as covered, move finished clips to "used"
     npm run tiktok -- skip <folder>        don't use this take; it won't be offered again
+    npm run tiktok -- edits [N] [--date D] build N takes as Edits projects, 2 a day (Edits must be open)
+    npm run tiktok -- english <folder>     add the English lines from edit.json to its Edits project
+    npm run tiktok -- caption <folder>     (re)write caption.txt (post text) for an Edits project
     (next: --number N starts the day's numbering at N, e.g. after posting one from the app)
 
 See tiktok/VIDEO-WORKFLOW.md for the whole workflow and tiktok/VIDEO-DESIGN.md for the design.
@@ -170,7 +173,17 @@ def exact_prompt(texts):
     except Exception:
         return max(texts, key=len, default="")
     votes = Counter(m for m in (bank_match(t, bank) for t in texts) if m)
+    if not votes and not _REFRESHED:  # a prompt added to parlons since the list was cached
+        _REFRESHED.append(True)
+        try:
+            bank = prompt_bank(refresh=True)
+        except Exception:
+            return max(texts, key=len, default="")
+        votes = Counter(m for m in (bank_match(t, bank) for t in texts) if m)
     return votes.most_common(1)[0][0] if votes else max(texts, key=len, default="")
+
+
+_REFRESHED = []
 
 
 # ---------- reading the laptop screen ----------
@@ -550,7 +563,22 @@ def cmd_posted(args):
     print(f"  logged as posted on day {edit['day']}: {edit['prompt'][:80]}")
 
 
-COMMANDS = {"scan": cmd_scan, "seed": cmd_seed, "backlog": cmd_backlog, "next": cmd_next, "review": cmd_review,
+def cmd_edits(args):
+    from edits import cmd_edits as run_edits
+    run_edits(args)
+
+
+def cmd_english(args):
+    from edits import cmd_english as run_english
+    run_english(args)
+
+
+def cmd_caption(args):
+    from edits import cmd_caption as run_caption
+    run_caption(args)
+
+
+COMMANDS = {"edits": cmd_edits, "english": cmd_english, "caption": cmd_caption, "scan": cmd_scan, "seed": cmd_seed, "backlog": cmd_backlog, "next": cmd_next, "review": cmd_review,
             "render": cmd_render, "posted": cmd_posted, "skip": cmd_skip}
 
 if __name__ == "__main__":

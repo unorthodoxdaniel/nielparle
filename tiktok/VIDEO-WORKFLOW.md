@@ -38,6 +38,54 @@ never used twice. Parlons is only read from, never changed.
 and it's never offered again. Posted the day's first video from the app? `next 1 --number 2` makes
 the next one N° 2.
 
+### In Edits (Instagram's editor on the Mac)
+
+Keep Edits open (its automation setting on), then ask Claude: **"prep today's TikToks in Edits"**.
+
+1. `npm run tiktok -- edits 6` makes one Edits project per take, two per day from today (so 6 takes
+   = 3 days), each named for the day it goes out: `Jour 81 · N°1 · prompt`, `Jour 81 · N°2 · …`.
+   Each has the clip cut from the roulette spin to 2 s after your last word (past the timer if you
+   kept talking), the Jour title in Advercase with the English line under it, "exercices de
+   spontanéité", and French captions from Edits' own auto-captions (free, and exactly what you
+   said), small and just above the laptop. `--per-day 1` for one a day.
+2. Claude reads the captions in `ready/<date>/<folder>/edit.json`, writes the English under each
+   line (what you meant, short, natural English, in pale yellow so it reads apart from the white
+   French) and fixes only words Edits misheard.
+3. `npm run tiktok -- english <folder>` puts the English lines into the project and writes
+   `caption.txt` next to it, ready to paste:
+   `Jour N de publications jusqu'à ce que je parle couramment français. 🇫🇷 <prompt>`, then
+   `Exercices de spontanéité`, then 5 hashtags (`#apprendrelefrançais #français #francophone` plus
+   two about the prompt's topic, from `hashtags` in `edit.json`). `npm run tiktok -- caption
+   <folder>` rewrites just the caption. The fixed parts are `POST` in [`edits.py`](edits.py).
+4. Check the project in Edits, export or post from there, then `npm run tiktok -- posted <folder>`.
+
+Edits can only open files in `~/Movies`, so clips are hard-linked into `~/Movies/nielparle` (no
+extra disk space). The look (fonts, sizes, positions) is `LOOK` in [`edits.py`](edits.py).
+
+#### For an AI agent doing this (Claude, Codex, …)
+
+"Prep the TikToks in Edits" means:
+
+1. Check Edits is reachable: `.venv/bin/python tiktok/edits_client.py` prints `"home"` or
+   `"editor"`. If it can't connect, ask for Edits to be opened. Outside Claude Code, set
+   `EDITS_URL` (e.g. `http://127.0.0.1:19501/mcp`) and `EDITS_TOKEN` from Edits' connect command.
+2. New clips in `unused footage/`? Run `npm run tiktok -- scan`. Then `npm run tiktok -- backlog`
+   and build what's asked: `npm run tiktok -- edits <N>` (two a day from today).
+3. For each new folder in `ready/<date>/`, edit `edit.json` → `captions[]`:
+   - `fr`: leave it as `heard`, except words the caption model clearly misheard (nonsense, or
+     the on-screen prompt read aloud wrongly). **Never correct his French**: grammar mistakes,
+     restarts and "euh" stay. Mistakes are left on purpose so native speakers correct them in
+     the comments.
+   - `en`: what he meant, in natural, casual English, one line per caption, about 45 characters
+     at most (longer lines wrap onto the laptop). Keep hesitations light ("uh…"). Not word for
+     word.
+   - `hashtags`: two hashtags about the prompt's topic, in French (e.g. `["#cinéma", "#films"]`).
+4. `npm run tiktok -- english <folder>` for each (it also writes `caption.txt`), then list the
+   projects for review. Don't
+   export or post: he reviews in Edits first.
+5. After he posts one: `npm run tiktok -- posted <folder>`. If he says a prompt went out
+   without the tool, add it to `tiktok/ledger.json` → `covered` so it's never built again.
+
 ### Going back to the app
 
 `render <folder> --clean` also writes `clean.mp4`: the same cut with no text. Upload that, paste
