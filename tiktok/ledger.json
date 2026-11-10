@@ -59,7 +59,43 @@
       "prompt": "Les révélations gâchent-elles une histoire, ou connaître la fin peut-il la rendre meilleure ?",
       "source": "instagram (screenshot 2026-11-07)",
       "posted": null
+    },
+    {
+      "prompt": "Peut-on aimer un personnage dont on désapprouve tous les choix ?",
+      "source": "IMG_2640.MOV",
+      "posted": "2026-11-07",
+      "day": 80,
+      "folder": "2026-11-07/1-peut-on-aimer-un-personnage-dont-on-desa"
+    },
+    {
+      "prompt": "Quel film ou quelle série aimeriez-vous découvrir à nouveau pour la première fois ?",
+      "source": "IMG_2641.MOV",
+      "posted": "2026-11-07",
+      "day": 80,
+      "folder": "2026-11-07/2-quel-film-ou-quelle-serie-aimeriez-vous"
+    },
+    {
+      "prompt": "Vous ne pouvez conserver qu'un seul genre de cinéma. Lequel choisissez-vous ?",
+      "source": "IMG_2643.MOV",
+      "posted": "2026-11-08",
+      "day": 81,
+      "folder": "2026-11-08/1-vous-ne-pouvez-conserver-qu-un-seul-genr"
+    },
+    {
+      "prompt": "Un film magnifique mérite-t-il d'être vu si son histoire est faible ?",
+      "source": "IMG_2647.MOV",
+      "posted": "2026-11-08",
+      "day": 81,
+      "folder": "2026-11-08/2-un-film-magnifique-merite-t-il-d-etre-vu"
+    },
+    {
+      "prompt": "Un épisode par semaine ou toute une saison d'un coup : qu'est-ce qui rend une série plus agréable ?",
+      "source": "IMG_2650.MOV",
+      "posted": "2026-11-09",
+      "day": 82,
+      "folder": "2026-11-09/1-un-episode-par-semaine-ou-toute-une-sais"
     }
   ],
-  "skipped": []
+  "skipped": [],
+  "last_day": 82
 }

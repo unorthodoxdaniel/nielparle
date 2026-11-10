@@ -3,12 +3,13 @@
     npm run tiktok -- scan                 read every clip in "unused footage" (cached)
     npm run tiktok -- seed                 log the prompts already posted ("reference footage")
     npm run tiktok -- backlog              list takes that are ready to use, oldest first
-    npm run tiktok -- next [N] [--date D]  make N new video folders for day D (default: today)
+    npm run tiktok -- day [N]              last posted Jour number (set it with N); next video is N+1
+    npm run tiktok -- next [N] --day D     make N new video folders, numbered from Jour D
     npm run tiktok -- review [folder]      captions, unsure words and corrections, as text
     npm run tiktok -- render <folder>      burn titles, captions and CTAs into video.mp4
     npm run tiktok -- posted <folder>      log the prompt as covered, move finished clips to "used"
     npm run tiktok -- skip <folder>        don't use this take; it won't be offered again
-    npm run tiktok -- edits [N] [--date D] build N takes as Edits projects, 2 a day (Edits must be open)
+    npm run tiktok -- edits [N] --day D    build N takes as Edits projects, 2 a day from Jour D (Edits open)
     npm run tiktok -- english <folder>     add the English lines from edit.json to its Edits project
     npm run tiktok -- caption <folder>     (re)write caption.txt (post text) for an Edits project
     (next: --number N starts the day's numbering at N, e.g. after posting one from the app)
@@ -31,7 +32,6 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 LEDGER = HERE / "ledger.json"
 FFMPEG = REPO / "node_modules" / "ffmpeg-static" / "ffmpeg"
-DAY_ONE = dt.date(2026, 8, 20)  # Jour 1
 
 
 def main_checkout() -> Path:
@@ -62,10 +62,6 @@ def norm(s: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", s).strip()
 
 
-def day_number(date: dt.date) -> int:
-    return (date - DAY_ONE).days + 1
-
-
 def load_json(path: Path, default):
     return json.loads(path.read_text()) if path.exists() else default
 
@@ -81,6 +77,30 @@ def clips(folder: Path):
 
 def ledger():
     return load_json(LEDGER, {"covered": [], "skipped": []})
+
+
+def last_day() -> int:
+    """The Jour number of the last video posted. Numbers follow posting, not the calendar (some days
+    there's no post, or only one), so the next video is last_day + 1."""
+    return ledger().get("last_day", 0)
+
+
+def require_day(args) -> int:
+    """The Jour number the next video gets. Always passed with --day, never guessed: the user
+    confirms it first, because a wrong number is on screen in the video."""
+    if "--day" not in args:
+        sys.exit(f"Which Jour number? The last one posted is {last_day()}, so the next is {last_day() + 1}.\n"
+                 f"Confirm it with the user, then pass --day {last_day() + 1}.")
+    return int(args[args.index("--day") + 1])
+
+
+def cmd_day(args):
+    """Show the last posted Jour number; `day 83` sets it (e.g. after posting without the tool)."""
+    led = ledger()
+    if args:
+        led["last_day"] = int(args[0])
+        save_json(LEDGER, led)
+    print(f"  last posted: Jour {led.get('last_day', 0)}; the next video is Jour {led.get('last_day', 0) + 1}")
 
 
 # ---------- prompt bank (parlons, read-only) ----------
@@ -343,7 +363,9 @@ def available_takes():
     done = [c["prompt"] for c in led["covered"]]
     skipped = {(s["clip"], round(s["start"])) for s in led["skipped"]}
     in_progress = set()
-    for edit in READY.glob("[0-9]*/*/edit.json"):
+    for edit in READY.glob("*/*/edit.json"):
+        if edit.parent.parent.name.startswith("_"):  # _samples, _skipped
+            continue
         e = json.loads(edit.read_text())
         in_progress.add((e["clip"], round(e["source_start"])))
         done.append(e["prompt"])
@@ -430,7 +452,8 @@ def group_cues(words, max_chars=34, max_gap=0.7):
 
 def cmd_next(args):
     count = int(args[0]) if args and args[0].isdigit() else 1
-    date = dt.date.fromisoformat(args[args.index("--date") + 1]) if "--date" in args else dt.date.today()
+    day = require_day(args)
+    date = dt.date.today()
     day_dir = READY / date.isoformat()
     # numbering within the day: after the folders already made for it, or from --number (e.g. when
     # the day's first video was posted from the app)
@@ -459,7 +482,7 @@ def cmd_next(args):
         words = [w for w in words if w["s"] < out_t]
         edit = {
             "status": "draft",  # draft → checked (captions corrected) → rendered → posted
-            "date": date.isoformat(), "day": day_number(date), "of_day": already,
+            "date": date.isoformat(), "day": day, "of_day": already,
             "clip": t["clip"], "source_start": t["start"], "source_end": round(t["start"] + out_t, 2),
             "landed": round(t["landed"] - t["start"], 2), "timer_start": round(t["timer_start"] - t["start"], 2),
             "prompt": prompt,
@@ -550,7 +573,8 @@ def cmd_posted(args):
         sys.exit("Already logged as posted.")
     led = ledger()
     led["covered"].append({"prompt": edit["prompt"], "source": edit["clip"],
-                           "posted": edit["date"], "day": edit["day"], "folder": f"{edit['date']}/{folder.name}"})
+                           "posted": edit["date"], "day": edit["day"], "folder": f"{folder.parent.name}/{folder.name}"})
+    led["last_day"] = max(led.get("last_day", 0), edit["day"])
     save_json(LEDGER, led)
     edit["status"] = "posted"
     save_json(folder / "edit.json", edit)
@@ -578,7 +602,7 @@ def cmd_caption(args):
     run_caption(args)
 
 
-COMMANDS = {"edits": cmd_edits, "english": cmd_english, "caption": cmd_caption, "scan": cmd_scan, "seed": cmd_seed, "backlog": cmd_backlog, "next": cmd_next, "review": cmd_review,
+COMMANDS = {"day": cmd_day, "edits": cmd_edits, "english": cmd_english, "caption": cmd_caption, "scan": cmd_scan, "seed": cmd_seed, "backlog": cmd_backlog, "next": cmd_next, "review": cmd_review,
             "render": cmd_render, "posted": cmd_posted, "skip": cmd_skip}
 
 if __name__ == "__main__":
