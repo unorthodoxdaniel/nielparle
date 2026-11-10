@@ -20,3 +20,9 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+## TikTok videos
+
+The daily @nielparle videos are prepped by `tiktok/` (footage lives outside git in
+`video-content/`). Before working on them, read `tiktok/VIDEO-WORKFLOW.md`, including the
+"For an AI agent" steps for building them in Edits for Mac.
