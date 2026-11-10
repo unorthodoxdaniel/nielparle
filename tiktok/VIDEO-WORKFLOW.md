@@ -9,7 +9,8 @@ Instagram, YouTube Shorts). No editing in the app.
 | folder               | what's in it                                                                 |
 |----------------------|------------------------------------------------------------------------------|
 | `unused footage/`    | every clip you record, straight off the phone                                |
-| `used footage/`      | clips that are finished with (moved there automatically after posting)       |
+| `used footage/`      | clips that went out (moved there automatically by `scan`, `posted` and `skip`; `archive` does it on its own) |
+| `not usable/`        | discarded clips, kept for you to look over: duds you skipped, spins you never answered (no timer), timers stopped early |
 | `reference footage/` | videos that went live; used to know which prompts are already done            |
 | `ready/jour-<N>/<n>-…/`| one folder per video: `caption.txt`, `edit.json` (and `video.mp4`, `captions.srt` from the render route) |
 | `.work/`             | caches (screen readings, audio, fonts); safe to delete                        |
@@ -33,6 +34,12 @@ never used twice. Parlons is only read from, never changed.
 4. `npm run tiktok -- render ready/<date>/<folder>` burns everything in (about 3–4 minutes a video).
 5. Upload `video.mp4`, paste `caption.txt`. Then `npm run tiktok -- posted ready/<date>/<folder>`
    logs the prompt and moves the clip to `used footage/` once all its takes are used.
+
+`scan`, `posted` and `skip` also clear out any other clip that's done with (no take left to use,
+none still being edited), so `unused footage/` only ever holds what's left to post: to
+`used footage/` if something from it went out, to `not usable/` if nothing did (every take skipped
+or stopped early, or no take at all: a spin you never answered). A dud take that was never built
+(phone died, nothing said): `npm run tiktok -- skip IMG_1234.MOV`.
 
 `npm run tiktok -- backlog` shows what's left. Don't like a take? `npm run tiktok -- skip <folder>`
 and it's never offered again. Posted the day's first video from the app? `next 1 --number 2` makes
@@ -68,10 +75,22 @@ Claude confirms the Jour number with you first (see above).
    `Exercices de spontanéité`, then 5 hashtags (`#apprendrelefrançais #français #francophone` plus
    two about the prompt's topic, from `hashtags` in `edit.json`). `npm run tiktok -- caption
    <folder>` rewrites just the caption. The fixed parts are `POST` in [`edits.py`](edits.py).
+   It also puts in any **pictures** listed in `edit.json` (see below).
 4. Check the project in Edits, export or post from there, then `npm run tiktok -- posted <folder>`.
 
 Edits can only open files in `~/Movies`, so clips are hard-linked into `~/Movies/nielparle` (no
 extra disk space). The look (fonts, sizes, positions) is `LOOK` in [`edits.py`](edits.py).
+
+**Safe zone.** TikTok, Reels and Shorts cover the top of the frame (tabs, Reels title), a column on
+the right (like, comment, share) and the bottom (username, caption, music). Every title, caption and
+picture stays inside `SAFE` in [`edits.py`](edits.py): 14% down from the top, 6% in from the left,
+16% in from the right, and above the bottom 34%. Text is centred on that area, so it sits slightly
+left of the frame's middle, clear of the buttons.
+
+**Pictures.** Where it helps the point, a picture of what he's talking about: both consoles for
+"PS5 or Xbox?", a game's poster when he names it. Not every video needs one; never force it. They
+go top left, over the room (he sits on the right), from the moment he says it, for about 3.5 s, never
+during the opening titles, with rounded corners. Two named together sit side by side.
 
 #### For an AI agent doing this (Claude, Codex, …)
 
@@ -93,10 +112,20 @@ extra disk space). The look (fonts, sizes, positions) is `LOOK` in [`edits.py`](
      at most (longer lines wrap onto the laptop). Keep hesitations light ("uh…"). Not word for
      word.
    - `hashtags`: two hashtags about the prompt's topic, in French (e.g. `["#cinéma", "#films"]`).
+   - `pictures` (optional): for things he names that a picture makes clearer (consoles, games,
+     films), save an image in `<folder>/pictures/` (official art or Wikipedia/Wikimedia; posters
+     and box art, or product shots on a transparent background; a logo with transparent
+     text goes on a plain card, dark or light, whichever it reads on) and add
+     `{"file": "ps5.png", "at": 14.2}`, `at` being when he first says it (the caption's `start`),
+     optionally `"seconds"` (default 3.5) and `"slot": "left"`/`"right"` for two shown together.
+     Leave it empty when nothing concrete comes up.
 4. `npm run tiktok -- english <folder>` for each (it also writes `caption.txt`), then list the
    projects for review. Don't
    export or post: he reviews in Edits first.
-5. After he posts one: `npm run tiktok -- posted <folder>`. If he says a prompt went out
+5. Dud takes (phone died, a prompt he spun but never answered, nothing worth posting): after
+   checking what was said, `npm run tiktok -- skip IMG_1234.MOV [start]`, which moves the clip to
+   `not usable/` for him to look over. Mention them to him.
+6. After he posts one: `npm run tiktok -- posted <folder>`. If he says a prompt went out
    without the tool, add it to `tiktok/ledger.json` → `covered` so it's never built again.
 
 ### Going back to the app

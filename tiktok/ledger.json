@@ -96,6 +96,12 @@
       "folder": "2026-11-09/1-un-episode-par-semaine-ou-toute-une-sais"
     }
   ],
-  "skipped": [],
+  "skipped": [
+    {
+      "clip": "IMG_2765.MOV",
+      "start": 32.75,
+      "prompt": "Un restaurant retire votre plat préféré parce que presque personne ne le commande. Défendez son maintien ou expliquez. pourquoi vous accepteriez cette décision."
+    }
+  ],
   "last_day": 82
 }

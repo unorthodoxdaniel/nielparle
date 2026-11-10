@@ -9,6 +9,10 @@
     npm run tiktok -- render <folder>      burn titles, captions and CTAs into video.mp4
     npm run tiktok -- posted <folder>      log the prompt as covered, move finished clips to "used"
     npm run tiktok -- skip <folder>        don't use this take; it won't be offered again
+                                           (or skip IMG_1234.MOV [start s], for a take never built)
+    npm run tiktok -- archive              move clips that are done with to "used footage"
+                                           (posted) or "not usable" (discarded)
+                                           (also runs after scan, posted and skip)
     npm run tiktok -- edits [N] --day D    build N takes as Edits projects, 2 a day from Jour D (Edits open)
     npm run tiktok -- english <folder>     add the English lines from edit.json to its Edits project
     npm run tiktok -- caption <folder>     (re)write caption.txt (post text) for an Edits project
@@ -44,6 +48,7 @@ def main_checkout() -> Path:
 CONTENT = Path(os.environ.get("VIDEO_CONTENT", main_checkout() / "video-content"))
 UNUSED = CONTENT / "unused footage"
 USED = CONTENT / "used footage"
+NOT_USABLE = CONTENT / "not usable"   # discarded clips (duds, unanswered spins), kept to look over
 REFERENCE = CONTENT / "reference footage"
 READY = CONTENT / "ready"
 WORK = CONTENT / ".work"
@@ -329,6 +334,7 @@ def cmd_scan(args):
         if not result[c.name]:
             print(f"  {c.name}: no timer found (not a roulette take?)")
     save_json(WORK / "takes.json", result)
+    archive_used()
 
 
 def cmd_seed(args):
@@ -388,6 +394,39 @@ def available_takes():
             if not reason:
                 seen.append(t["prompt"])
     return out
+
+
+def archive_used():
+    """Move every clip that's done with out of unused footage/, so it only holds what's left to post:
+    - to used footage/ when something from it went out (a take posted, or its prompt already posted)
+    - to not usable/ when nothing did: every take skipped or stopped early, or no take at all (no
+      timer on the laptop: a spin he didn't answer). Kept there for him to look over.
+    A clip with a take still to use, or one still being edited, stays put."""
+    takes = load_json(WORK / "takes.json", {})
+    usable, went_out = set(), {c.get("source") for c in ledger()["covered"]}
+    for t in available_takes():
+        if not t["reason"]:
+            usable.add(t["clip"])
+        elif t["reason"] == "prompt already posted":
+            went_out.add(t["clip"])
+    editing = set()
+    for edit in READY.glob("*/*/edit.json"):
+        if edit.parent.parent.name.startswith("_"):
+            continue
+        e = json.loads(edit.read_text())
+        (went_out if e.get("status") == "posted" else editing).add(e["clip"])
+    moved = {USED: [], NOT_USABLE: []}
+    for name in sorted(takes):
+        if name in usable or name in editing or not (UNUSED / name).exists():
+            continue
+        dest = USED if name in went_out else NOT_USABLE
+        dest.mkdir(exist_ok=True)
+        shutil.move(str(UNUSED / name), dest / name)
+        moved[dest].append(name)
+    for dest, names in moved.items():
+        if names:
+            print(f"  moved to {dest.name}: {', '.join(names)}")
+    return moved[USED] + moved[NOT_USABLE]
 
 
 def cmd_backlog(args):
@@ -554,7 +593,21 @@ def cmd_review(args):
 
 
 def cmd_skip(args):
-    """Don't use this take (bad take, don't like it): never offered again; its folder moves aside."""
+    """Don't use this take (bad take, don't like it): never offered again; its folder moves aside.
+    Also takes a clip name (IMG_2765.MOV [start s]) for a take that was never built."""
+    if not (Path(args[0]) / "edit.json").exists():
+        name = Path(args[0]).name
+        found = [t for t in load_json(WORK / "takes.json", {}).get(name, [])
+                 if len(args) < 2 or abs(t["start"] - float(args[1])) < 1]
+        if not found:
+            sys.exit(f"No take found for {' '.join(args)} (run `npm run tiktok -- scan`?)")
+        led = ledger()
+        for t in found:
+            led["skipped"].append({"clip": name, "start": t["start"], "prompt": t["prompt"]})
+            print(f"  skipped {name} at {t['start']:.1f}s: {t['prompt'][:70]}")
+        save_json(LEDGER, led)
+        archive_used()
+        return
     folder = Path(args[0]).resolve()
     edit = load_json(folder / "edit.json", None)
     led = ledger()
@@ -564,6 +617,12 @@ def cmd_skip(args):
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.move(str(folder), dest)
     print(f"  skipped; folder moved to {dest}")
+    archive_used()
+
+
+def cmd_archive(args):
+    if not archive_used():
+        print("  nothing to archive: every clip in unused footage still has a take to use")
 
 
 def cmd_posted(args):
@@ -578,13 +637,8 @@ def cmd_posted(args):
     save_json(LEDGER, led)
     edit["status"] = "posted"
     save_json(folder / "edit.json", edit)
-    # move the raw clip once none of its takes are left to use
-    left = [t for t in available_takes() if t["clip"] == edit["clip"] and not t["reason"]]
-    if not left and (UNUSED / edit["clip"]).exists():
-        USED.mkdir(exist_ok=True)
-        shutil.move(str(UNUSED / edit["clip"]), USED / edit["clip"])
-        print(f"  moved {edit['clip']} to used footage")
     print(f"  logged as posted on day {edit['day']}: {edit['prompt'][:80]}")
+    archive_used()
 
 
 def cmd_edits(args):
@@ -603,7 +657,8 @@ def cmd_caption(args):
 
 
 COMMANDS = {"day": cmd_day, "edits": cmd_edits, "english": cmd_english, "caption": cmd_caption, "scan": cmd_scan, "seed": cmd_seed, "backlog": cmd_backlog, "next": cmd_next, "review": cmd_review,
-            "render": cmd_render, "posted": cmd_posted, "skip": cmd_skip}
+            "render": cmd_render, "posted": cmd_posted, "skip": cmd_skip,
+            "archive": cmd_archive}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
