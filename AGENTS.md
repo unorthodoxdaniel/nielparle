@@ -25,4 +25,5 @@ Consult these guides before working on related tasks:
 
 The daily @nielparle videos are prepped by `tiktok/` (footage lives outside git in
 `video-content/`). Before working on them, read `tiktok/VIDEO-WORKFLOW.md`, including the
-"For an AI agent" steps for building them in Edits for Mac.
+"For an AI agent" steps for building them in Edits for Mac. Always confirm the Jour number with the
+user before building: it follows posting (last posted + 1), not the calendar.

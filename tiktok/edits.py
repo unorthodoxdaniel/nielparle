@@ -1,6 +1,6 @@
 """Builds each take as a project in Edits for Mac (Instagram's editor), instead of rendering it here.
 
-    npm run tiktok -- edits [N] [--date D] [--per-day 2]  make N Edits projects, 2 a day from D (today)
+    npm run tiktok -- edits [N] --day D [--per-day 2]     make N Edits projects, 2 a day from Jour D
     npm run tiktok -- english <folder>                    put the English lines from edit.json into Edits
     npm run tiktok -- caption <folder>                    (re)write caption.txt, the post text
 
@@ -115,8 +115,7 @@ def caption_positions(e, captions, top):
         e.call("setTextPosition", id=c["id"], x=0.5, y=round(y, 4))
 
 
-def build(e, take, date, number):
-    day = t.day_number(date)
+def build(e, take, day, number):
     clip = t.UNUSED / take["clip"]
     MOVIES.mkdir(parents=True, exist_ok=True)
     linked = MOVIES / clip.name
@@ -129,7 +128,7 @@ def build(e, take, date, number):
 
     prompt = t.exact_prompt([f["text"] for f in t.read_screen(clip)
                              if take["landed"] <= f["t"] <= take["end"] and f["text"]])
-    folder = t.READY / date.isoformat() / f"{number}-{t.slug(prompt)}"
+    folder = t.READY / f"jour-{day}" / f"{number}-{t.slug(prompt)}"
     folder.mkdir(parents=True, exist_ok=True)
     name = f"Jour {day} · N°{number} · {prompt[:40]}"
     print(f"  building {name} …")
@@ -171,7 +170,7 @@ def build(e, take, date, number):
     edit = {
         "status": "edits",  # edits (project made) → english (lines added) → posted
         "editor": "edits", "project_id": pid, "project_name": name,
-        "date": date.isoformat(), "day": day, "of_day": number,
+        "date": dt.date.today().isoformat(), "day": day, "of_day": number,
         "clip": take["clip"], "source_start": take["start"], "source_end": round(take["start"] + length, 2),
         "prompt": prompt, "laptop_top": round(top, 3), "title_ids": ids,
         # Claude fills "en" (what was meant, in natural English) and, only for words Edits misheard,
@@ -188,25 +187,22 @@ def build(e, take, date, number):
 
 
 def cmd_edits(args):
-    """N projects from the backlog, spread over days: --per-day (default 2) a day from --date
-    (default today), after any already made for that day. Each is named for the day it's posted."""
+    """N projects from the backlog, per-day (default 2) a day starting at Jour --day D (required: the
+    user confirms the number first; it follows posting, not the calendar). Each is named for its Jour."""
     count = int(args[0]) if args and args[0].isdigit() else 1
-    date = dt.date.fromisoformat(args[args.index("--date") + 1]) if "--date" in args else dt.date.today()
+    day = t.require_day(args)
     per_day = int(args[args.index("--per-day") + 1]) if "--per-day" in args else 2
-    first_number = int(args[args.index("--number") + 1]) if "--number" in args else None
     picks = [x for x in t.available_takes() if not x["reason"]][:count]
     if not picks:
         sys.exit("No unused takes left. Record more, or check `npm run tiktok -- backlog`.")
     e = Edits()
     for take in picks:
         while True:
-            made = len(list((t.READY / date.isoformat()).glob("*/edit.json")))
-            number = first_number if first_number else made + 1
+            number = len(list((t.READY / f"jour-{day}").glob("*/edit.json"))) + 1
             if number <= per_day:
                 break
-            date, first_number = date + dt.timedelta(days=1), None
-        build(e, take, date, number)
-        first_number = None
+            day += 1
+        build(e, take, day, number)
 
 
 def write_caption(folder, edit):
