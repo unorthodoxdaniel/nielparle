@@ -10,6 +10,11 @@ What a project gets (the look of the Jour 79 reference video):
   3.5–6.5 s "exercices de spontanéité" (Advercase)
   all along French captions from Edits' own auto-captions, exactly as said, just above the laptop,
             with the English meaning under each line (written by Claude into edit.json, then `english`)
+  now and then a picture of what he's talking about (a console, a game's poster), top left, for a few
+            seconds from when he says it (chosen by Claude into edit.json "pictures", then `english`)
+
+Everything stays inside SAFE: the part of the frame TikTok, Reels and Shorts don't cover with their
+own buttons and text.
 
 Edits must be open. It can only read files in ~/Movies, so clips are hard-linked into ~/Movies/nielparle
 (no extra disk space). The look is set in LOOK below.
@@ -32,11 +37,17 @@ POST = {
     "base_tags": ["#apprendrelefrançais", "#français", "#francophone"],
 }
 
+# The part of the 9:16 frame no platform covers (canvas fractions), the strictest of TikTok, Instagram
+# Reels and YouTube Shorts: top bar (Following / For you, Reels title), the like/comment/share column
+# on the right, and the username, caption and music line at the bottom.
+SAFE = {"top": 0.14, "bottom": 0.66, "left": 0.06, "right": 0.84}
+SAFE_X = round((SAFE["left"] + SAFE["right"]) / 2, 3)  # text is centred on the safe area, not the frame
+
 LOOK = {
     "title_font": "Advercase-Regular",
     "small_font": "IGSansCondensedGlobal-Regular",
-    "title": ("Jour {day} de publications jusqu'à ce\nque je parle couramment français.", 17, 0.13),
-    "title_en": ("Day {day} of posting till I speak French fluently", 11, 0.20),
+    "title": ("Jour {day} de publications jusqu'à ce\nque je parle couramment français.", 17, 0.175),
+    "title_en": ("Day {day} of posting till I speak French fluently", 11, 0.235),
     "format": ("exercices de spontanéité", 21, 0.20),
     "title_time": (0.0, 3.5),
     "format_time": (3.5, 3.0),
@@ -52,10 +63,20 @@ LOOK = {
     "en_above_laptop": 0.024,
     "caption_row": 0.027,       # height of one row of French
     "caption_row_chars": 42,    # about this many characters fit on one row
+    # Edits wraps captions at ~46 characters, wider than the safe area: longer captions are split in
+    # time (at Edits' own word timings) until each is one row this long at most
+    "caption_max_chars": 38,
     "laptop_top_default": 0.565,
     "tail": 2.0,         # seconds kept after the last word
     "past_timer": 25.0,  # how far past the timer to look for the end of the answer
     "done_gap": 4.0,     # after the timer, a silence this long means the answer is over
+    # pictures: top left, over the empty part of the room (he sits on the right), never over the
+    # titles. "width" is the picture's width as a share of the frame (Edits' overlay scale).
+    "picture_x": 0.25, "picture_width": 0.38,
+    "pair_x": (0.165, 0.37), "pair_width": 0.19,   # two at once (PS5 or Xbox?): side by side
+    "picture_gap_above_captions": 0.09,  # picture bottom stays this far above the laptop's top edge
+    "picture_time": 3.5,   # seconds on screen unless edit.json says otherwise
+    "picture_corner": 0.06,
 }
 
 
@@ -63,7 +84,7 @@ def styled_text(e, text, at, dur, font, size, y, outline=False, colour="#FFFFFF"
     el = e.call("addText", text=text, atSeconds=at, duration=dur)["id"]
     e.call("setTextFont", id=el, family=font)
     e.call("setTextStyle", id=el, size=size, color=colour)
-    e.call("setTextPosition", id=el, x=0.5, y=y)
+    e.call("setTextPosition", id=el, x=SAFE_X, y=y)
     if outline:
         e.call("setEmphasis", id=el, style="outline", color="#000000")
     return el
@@ -112,7 +133,35 @@ def caption_positions(e, captions, top):
         y = top - LOOK["fr_bottom_above_laptop"] - rows(c["text"]) * LOOK["caption_row"] / 2
         e.call("setTextFont", id=c["id"], family=LOOK["caption_font"])
         e.call("setTextStyle", id=c["id"], size=LOOK["caption_size"], color="#FFFFFF")
-        e.call("setTextPosition", id=c["id"], x=0.5, y=round(y, 4))
+        e.call("setTextPosition", id=c["id"], x=SAFE_X, y=round(y, 4))
+
+
+def split_long(e, caps):
+    """Split captions longer than caption_max_chars in two (Edits snaps the cut to a word), until
+    each fits on one row inside the safe area. Cut points are tried nearest the middle first; a
+    caption Edits won't split anywhere is left as it is."""
+    limit, stuck = LOOK["caption_max_chars"], set()
+    for _ in range(200):
+        long_ = next((c for c in caps if len(c["text"]) > limit and c["id"] not in stuck), None)
+        if not long_:
+            break
+        text, t0, t1 = long_["text"], long_["startTime"], long_["endTime"]
+        cuts, at = [], 0
+        for w in text.split()[:-1]:
+            at += len(w) + 1
+            cuts.append(at)
+        cuts.sort(key=lambda c: abs(c - len(text) / 2))
+        for cut in cuts[:6]:
+            try:
+                e.call("splitCaption", id=long_["id"], time=round(t0 + (t1 - t0) * cut / len(text), 3))
+                break
+            except EditsError:
+                continue
+        else:
+            stuck.add(long_["id"])
+            print(f"    couldn't split «{text}» (left on two rows)")
+        caps = e.call("captions")["captions"]
+    return caps
 
 
 def build(e, take, day, number):
@@ -155,8 +204,11 @@ def build(e, take, day, number):
         e.call("trim", id=vid, side="right", deltaSeconds=round(length - end, 3))
         length = end
         caps = [c for c in e.call("captions")["captions"] if c["startTime"] < length]
+    caps = split_long(e, caps)
     e.call("setCaptionStyle", style=LOOK["caption_style"])
-    top = laptop_top(clip, take["timer_start"])
+    # captions sit just above the laptop, but never below the safe area (when the laptop is low in
+    # the shot): the English line, the lowest, stays above SAFE bottom
+    top = min(laptop_top(clip, take["timer_start"]), SAFE["bottom"] - 0.012 + LOOK["en_above_laptop"])
     caption_positions(e, caps, top)
 
     ids = {}
@@ -180,6 +232,9 @@ def build(e, take, day, number):
         "english_ids": [],
         # Claude: 2 hashtags about this prompt's topic, e.g. ["#films", "#séries"]
         "hashtags": [],
+        # Claude, only where a picture helps (a console, a game's poster): files in pictures/,
+        # e.g. {"file": "ps5.png", "at": 14.2, "slot": "left"} ("slot" only for two at once)
+        "pictures": [], "picture_ids": [],
     }
     t.save_json(folder / "edit.json", edit)
     print(f"  → {folder}  ({len(caps)} caption lines, {length:.0f} s)")
@@ -213,6 +268,60 @@ def write_caption(folder, edit):
     return text
 
 
+def picture_size(path: Path):
+    """Pixel width and height of an image (sips ships with macOS)."""
+    out = t.subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", str(path)],
+                           capture_output=True, text=True).stdout
+    vals = dict(l.split(":") for l in out.splitlines() if ":" in l and "pixel" in l)
+    return int(vals["  pixelWidth"]), int(vals["  pixelHeight"])
+
+
+def place_pictures(e, folder, edit):
+    """Each entry of edit.json "pictures" ({"file", "at", "seconds"?, "slot"?: "left"/"right" for a
+    pair}) goes on screen top left from "at" (video seconds) for a few seconds. Files are in the
+    folder's pictures/; Edits can only read ~/Movies, so they're hard-linked there."""
+    existing = {el["id"] for el in e.call("elements", fields=["id"], limit=1000)["elements"]}
+    for old in edit.get("picture_ids", []):
+        if old in existing:
+            e.call("selectById", id=old, addToSelection=False)
+            e.call("delete")
+    ids = []
+    titles_end = sum(LOOK["format_time"])
+    length = edit["source_end"] - edit["source_start"]
+    for pic in edit.get("pictures", []):
+        src = folder / "pictures" / pic["file"]
+        linked = MOVIES / "pictures" / f"{folder.parent.name}-{folder.name}-{pic['file']}"
+        linked.parent.mkdir(parents=True, exist_ok=True)
+        if linked.exists():
+            linked.unlink()
+        os.link(src, linked)
+        slot = pic.get("slot")
+        width = LOOK["pair_width"] if slot else LOOK["picture_width"]
+        x = LOOK["pair_x"][slot == "right"] if slot else LOOK["picture_x"]
+        w, h = picture_size(src)
+        height = width * (h / w) * (9 / 16)  # as a share of the frame's height
+        # the free band between the top of the safe area and the captions: centred in it
+        top, bottom = SAFE["top"] + 0.02, min(edit["laptop_top"] - LOOK["picture_gap_above_captions"], SAFE["bottom"])
+        if height > bottom - top:  # too tall for the space: shrink it to fit
+            width *= (bottom - top) / height
+            height = bottom - top
+        y = round((top + bottom) / 2, 4)
+        at = max(pic["at"], titles_end)
+        seconds = min(pic.get("seconds", LOOK["picture_time"]), length - at)
+        if seconds < 1:
+            continue
+        el = e.call("addOverlay", path=str(linked), startSeconds=round(at, 2), x=x, y=y,
+                    scale=round(width, 4))["id"]
+        default = 3.0  # Edits gives a still 3 s
+        if abs(seconds - default) > 0.05:
+            e.call("trim", id=el, side="right", deltaSeconds=round(default - seconds, 3))
+        e.call("setMask", id=el, shape="rectangle", sizeW=1, sizeH=1, centerX=0.5, centerY=0.5,
+               cornerRadius=LOOK["picture_corner"])
+        ids.append(el)
+    edit["picture_ids"] = ids
+    return ids
+
+
 def cmd_caption(args):
     folder = Path(args[0]).resolve()
     edit = t.load_json(folder / "edit.json", None)
@@ -243,10 +352,11 @@ def cmd_english(args):
         new_ids.append(styled_text(e, c["en"], c["start"], round(c["end"] - c["start"], 3),
                                    LOOK["english_font"], LOOK["english_size"],
                                    top - LOOK["en_above_laptop"], outline=True, colour=LOOK["english_colour"]))
+    pics = place_pictures(e, folder, edit)
     e.call("saveProject")
     edit.update(english_ids=new_ids, status="english")
     t.save_json(folder / "edit.json", edit)
-    print(f"  {len(new_ids)} English lines added to «{edit['project_name']}» in Edits.")
+    print(f"  {len(new_ids)} English lines and {len(pics)} pictures added to «{edit['project_name']}» in Edits.")
     write_caption(folder, edit)
     print(f"  caption.txt written")
 
