@@ -82,6 +82,12 @@ LOOK = {
 
 def styled_text(e, text, at, dur, font, size, y, outline=False, colour="#FFFFFF"):
     el = e.call("addText", text=text, atSeconds=at, duration=dur)["id"]
+    # Edits sometimes snaps a new text to the start of the one before it (seen when lines follow
+    # each other closely): put it back where it was asked for
+    got = e.call("getElement", id=el)
+    got = got.get("element", got)
+    if abs(got.get("startTime", at) - at) > 0.05:
+        e.call("move", id=el, toSeconds=round(at, 3))
     e.call("setTextFont", id=el, family=font)
     e.call("setTextStyle", id=el, size=size, color=colour)
     e.call("setTextPosition", id=el, x=SAFE_X, y=y)

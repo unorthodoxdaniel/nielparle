@@ -94,6 +94,90 @@
       "posted": "2026-11-09",
       "day": 82,
       "folder": "2026-11-09/1-un-episode-par-semaine-ou-toute-une-sais"
+    },
+    {
+      "prompt": "Tu prends encore le jeu en boîte ou tu le télécharges ?",
+      "source": "IMG_2750.MOV",
+      "posted": "2026-11-10",
+      "day": 83,
+      "folder": "jour-83/1-tu-prends-encore-le-jeu-en-boite-ou-tu-l"
+    },
+    {
+      "prompt": "Les potes passent à la maison. FIFA ou NBA 2K ?",
+      "source": "IMG_2751.MOV",
+      "posted": "2026-11-10",
+      "day": 84,
+      "folder": "jour-84/1-les-potes-passent-a-la-maison-fifa-ou-nb"
+    },
+    {
+      "prompt": "T’as grandi avec Mario ou Sonic ?",
+      "source": "IMG_2752.MOV",
+      "posted": "2026-11-10",
+      "day": 84,
+      "folder": "jour-84/2-t-as-grandi-avec-mario-ou-sonic"
+    },
+    {
+      "prompt": "C’est quoi le dernier jeu qui t’a fait dire « encore cinq minutes » à deux heures du matin ?",
+      "source": "IMG_2753.MOV",
+      "posted": "2026-11-10",
+      "day": 85,
+      "folder": "jour-85/1-c-est-quoi-le-dernier-jeu-qui-t-a-fait-d"
+    },
+    {
+      "prompt": "Un jeu que tout le monde adore et que t’as jamais réussi à finir ?",
+      "source": "IMG_2754.MOV",
+      "posted": "2026-11-10",
+      "day": 85,
+      "folder": "jour-85/2-un-jeu-que-tout-le-monde-adore-et-que-t"
+    },
+    {
+      "prompt": "Ton jeu préféré mérite une suite ou un remake ?",
+      "source": "IMG_2755.MOV",
+      "posted": "2026-11-10",
+      "day": 86,
+      "folder": "jour-86/1-ton-jeu-prefere-merite-une-suite-ou-un-r"
+    },
+    {
+      "prompt": "Ce soir, tu joues en solo ou en ligne avec les potes ?",
+      "source": "IMG_2756.MOV",
+      "posted": "2026-11-10",
+      "day": 86,
+      "folder": "jour-86/2-ce-soir-tu-joues-en-solo-ou-la-pralige"
+    },
+    {
+      "prompt": "Tu préfères acheter une console de nouvelle génération ou monter ton propre PC ?",
+      "source": "IMG_2757.MOV",
+      "posted": "2026-11-10",
+      "day": 87,
+      "folder": "jour-87/1-tu-preferes-acheter-une-console-de-nouve"
+    },
+    {
+      "prompt": "Tu lances un nouveau jeu ou tu relances celui que tu connais par cœur ?",
+      "source": "IMG_2758.MOV",
+      "posted": "2026-11-10",
+      "day": 87,
+      "folder": "jour-87/2-tu-lances-un-nouveau-jeu-ou-tu-relances"
+    },
+    {
+      "prompt": "Tu joues pour l’histoire ou tu passes la soirée sur le même boss ?",
+      "source": "IMG_2761.MOV",
+      "posted": "2026-11-10",
+      "day": 88,
+      "folder": "jour-88/1-tu-joues-pour-l-histoire-ou-tu-passes-la"
+    },
+    {
+      "prompt": "Toute l’équipe est connectée. Fortnite ou Call of Duty ?",
+      "source": "IMG_2762.MOV",
+      "posted": "2026-11-10",
+      "day": 88,
+      "folder": "jour-88/2-toute-l-equipe-est-connectee-fortnite-ou"
+    },
+    {
+      "prompt": "Si tu pouvais retrouver une console de ton enfance, laquelle tu choisirais ?",
+      "source": "IMG_2763.MOV",
+      "posted": "2026-11-10",
+      "day": 89,
+      "folder": "jour-89/1-si-tu-pouvais-retrouver-une-console-de-t"
     }
   ],
   "skipped": [
@@ -103,5 +187,5 @@
       "prompt": "Un restaurant retire votre plat préféré parce que presque personne ne le commande. Défendez son maintien ou expliquez. pourquoi vous accepteriez cette décision."
     }
   ],
-  "last_day": 82
+  "last_day": 89
 }
