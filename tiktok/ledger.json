@@ -178,6 +178,20 @@
       "posted": "2026-11-10",
       "day": 89,
       "folder": "jour-89/1-si-tu-pouvais-retrouver-une-console-de-t"
+    },
+    {
+      "prompt": "Recommandez une chanson en décrivant le moment idéal pour l'écouter.",
+      "source": "IMG_2764.MOV",
+      "posted": "2026-11-10",
+      "day": 90,
+      "folder": "jour-90/1-recommandez-une-chanson-ideal-pour-l-eco"
+    },
+    {
+      "prompt": "Préféreriez-vous vivre dans votre univers de fiction préféré ou passer une journée avec son personnage principal ?",
+      "source": "IMG_2834.MOV",
+      "posted": "2026-11-17",
+      "day": 91,
+      "folder": "jour-91/1-prefereriez-vous-vivre-dans-votre-univer"
     }
   ],
   "skipped": [
@@ -187,5 +201,5 @@
       "prompt": "Un restaurant retire votre plat préféré parce que presque personne ne le commande. Défendez son maintien ou expliquez. pourquoi vous accepteriez cette décision."
     }
   ],
-  "last_day": 89
+  "last_day": 91
 }
