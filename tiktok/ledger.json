@@ -178,6 +178,41 @@
       "posted": "2026-11-10",
       "day": 89,
       "folder": "jour-89/1-si-tu-pouvais-retrouver-une-console-de-t"
+    },
+    {
+      "prompt": "Recommandez une chanson en décrivant le moment idéal pour l'écouter.",
+      "source": "IMG_2764.MOV",
+      "posted": "2026-11-10",
+      "day": 90,
+      "folder": "jour-90/1-recommandez-une-chanson-ideal-pour-l-eco"
+    },
+    {
+      "prompt": "Préféreriez-vous vivre dans votre univers de fiction préféré ou passer une journée avec son personnage principal ?",
+      "source": "IMG_2834.MOV",
+      "posted": "2026-11-17",
+      "day": 91,
+      "folder": "jour-91/1-prefereriez-vous-vivre-dans-votre-univer"
+    },
+    {
+      "prompt": "Une seule personne organise tout le voyage. A-t-elle le dernier mot quand les autres se plaignent ?",
+      "source": "IMG_2857.MOV",
+      "posted": "2026-11-19",
+      "day": 92,
+      "folder": "jour-92/1-une-seule-personne-organise-tout-le-voya"
+    },
+    {
+      "prompt": "Que devrait-il arriver aux comptes en ligne d'une personne qui ne les utilise plus pendant des années ?",
+      "source": "IMG_2862.MOV",
+      "posted": "2026-11-19",
+      "day": 93,
+      "folder": "jour-93/1-taprtoe-se-dlcorreces-o-son-aetod-que-de"
+    },
+    {
+      "prompt": "Une série que vous adorez revient pour un dernier épisode, vingt ans plus tard. Que devrait-il s'y passer ?",
+      "source": "IMG_2863.MOV",
+      "posted": "2026-11-19",
+      "day": 94,
+      "folder": "jour-94/1-une-serie-que-vous-adorez-revient-pour-u"
     }
   ],
   "skipped": [
@@ -187,5 +222,5 @@
       "prompt": "Un restaurant retire votre plat préféré parce que presque personne ne le commande. Défendez son maintien ou expliquez. pourquoi vous accepteriez cette décision."
     }
   ],
-  "last_day": 89
+  "last_day": 94
 }

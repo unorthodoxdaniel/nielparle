@@ -49,6 +49,10 @@ LOOK = {
     "title": ("Jour {day} de publications jusqu'à ce\nque je parle couramment français.", 17, 0.175),
     "title_en": ("Day {day} of posting till I speak French fluently", 11, 0.235),
     "format": ("exercices de spontanéité", 21, 0.20),
+    # which of the day's videos this is (N°1, N°2), under the English line, with the titles: two go
+    # out under the same Jour, so this tells them apart at a glance. Pale yellow like the English.
+    "number": ("N°{number}", 15, 0.275),
+    "number_colour": "#F6D98B",
     "title_time": (0.0, 3.5),
     "format_time": (3.5, 3.0),
     "caption_style": "Default",       # Edits' style: whole line at once, heavy white
@@ -223,6 +227,9 @@ def build(e, take, day, number):
         at, dur = LOOK["format_time"] if key == "format" else LOOK["title_time"]
         font = LOOK["small_font"] if key == "title_en" else LOOK["title_font"]
         ids[key] = styled_text(e, text.format(day=day), at, dur, font, size, y)
+    text, size, y = LOOK["number"]
+    ids["number"] = styled_text(e, text.format(number=number), *LOOK["title_time"], LOOK["title_font"],
+                                size, y, colour=LOOK["number_colour"])
     e.call("saveProject")
 
     edit = {

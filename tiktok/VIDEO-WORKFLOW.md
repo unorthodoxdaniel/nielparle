@@ -63,7 +63,8 @@ Claude confirms the Jour number with you first (see above).
    takes = Jour 83, 84, 85), each named for the Jour it goes out: `Jour 83 · N°1 · prompt`,
    `Jour 83 · N°2 · …`. Folders are `ready/jour-83/…`.
    Each has the clip cut from the roulette spin to 2 s after your last word (past the timer if you
-   kept talking), the Jour title in Advercase with the English line under it, "exercices de
+   kept talking), the Jour title in Advercase with the English line under it and the day's number (N°1, N°2, in
+   pale yellow, so the two videos of a Jour read apart), "exercices de
    spontanéité", and French captions from Edits' own auto-captions (free, and exactly what you
    said), small and just above the laptop. `--per-day 1` for one a day.
 2. Claude reads the captions in `ready/jour-<N>/<folder>/edit.json`, writes the English under each
